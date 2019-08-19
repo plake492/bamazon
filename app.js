@@ -10,12 +10,16 @@ const connection = mysql.createConnection({
   database: "bamazon_db"
 });
 
-let choicesArr = [] // stores the number of items in bamazon_db
-let departmentArr = ["all"] // store depeartment names, including an ALL option
-let intoArrayDepartmant = "" // store only UNIQE department names
-let user_choice_product_id = "" // KEEPS SELECTED ID IF differentQantity FUNCTION IS CALLED
-let userCart = []
-let userCartTotal = 0
+let choicesArr = []                 // stores the number of items in bamazon_db
+let departmentArr = ["All"]         // store depeartment names, including an ALL option
+let intoArrayDepartmant = ""        // store only UNIQE department names
+let user_choice_product_id = ""     // KEEPS SELECTED ID IF differentQantity FUNCTION IS CALLED
+let userCart = []                   //Stores All items selected for puchase
+let userCartTotal = 0               //Sums the price of All items in the cart
+let displayProducts = ""
+let table = cTable.getTable();
+
+
 
 function runBamazon () {
 
@@ -23,6 +27,7 @@ function runBamazon () {
         if (err) throw err;
         console.log("connected as id " + connection.threadId);
         connection.query("SELECT * FROM products", function(err, item) {
+            
             for (let i = 0; i < item.length; i++){
                 departmentArr.push(item[i].department)
                 let newChoiceArr = new Set(departmentArr);
@@ -31,7 +36,7 @@ function runBamazon () {
             if (err) throw err;
             
         console.log("\n================================================================================")
-        console.log("Hello, welcome to Bamazon")
+        console.log("Hello! Welcome to Bamazon")
         console.log("================================================================================\n")
         runBamazonInside()
         });
@@ -47,7 +52,7 @@ function runBamazon () {
                 name: "department"
             }
         ]).then(({department}) => {
-            if (department === "all") {
+            if (department === "All") {
                 let query = "SELECT * FROM products"
                 displayProduct(query, "All Departments")
             } else {
@@ -57,9 +62,8 @@ function runBamazon () {
         });
     }
 
-
+    // ====================================== DISPLAY PRODUCTS ======================================//
     function displayProduct(query, dep) {
-    // ------------------ DISPLAY PRODUCTS ------------------//
         console.log("connected as id " + connection.threadId);
         connection.query(query,[dep], function(err, item) {
 
@@ -67,20 +71,28 @@ function runBamazon () {
                 choicesArr.push(item[i].id);
                 
             }
+    
             console.log("\n================================================================================")
             console.log("Welcome to the " + dep + " department.\nTake a look at what we have avalible")
-            console.log("\n========================================ITEMS FOR SALE========================================\n")
+            console.log("\n------------------------------------------ITEMS FOR SALE------------------------------------------\n")
             if (err) throw err;
+            
             item.forEach(item => {
-            console.log("Id: " + item.id + " | " + item.product + " |  Price: $" + item.price + " |  Department: " + item.department)
+                if (dep === "All Departments") {
+                    displayProducts = "Id: " + item.id + " | " + item.product + " |  Price: $" + item.price + " |  Department: " + item.department
+                } else {
+                    displayProducts = "Id: " + item.id + " | " + item.product + " |  Price: $" + item.price
+                }
+                
+            console.log(displayProducts)
             })
-            console.log("\n================================================================================\n")
             selectProduct(choicesArr)
         });
     }
+    // ====================================== DISPLAY PRODUCTS ======================================//
 
 
-
+    // ====================================== SELECTPRODUCTS ======================================//
     function selectProduct(x) {
         inquirer
         .prompt([
@@ -108,7 +120,9 @@ function runBamazon () {
             });
         });
     };
+    // ====================================== SELECT PRODUCTS ======================================//
 
+    // ====================================== SELECT QUANTITY ======================================//
     function quantity(x) {
         inquirer
         .prompt([
@@ -135,17 +149,22 @@ function runBamazon () {
                 if (user_quantity > res[0].stock_quantity) {
                     console.log("\n================================================================================\n")
                     console.log("\nInsufficient quantity!\n")
-                    differntQuantity()
+                    differntQuantity()  // Fires Function to allow the user to select a differnt quantity
+
                 } else {
-                    console.log("\n========================================PRODUCT========================================")
-                    console.log("\n Your order total is: $" + orderTotal + "\n")
-                    console.log("\n================================================================================")
-
-                    userCart.push(user_quantity + ":" + res[0].product + ":" + orderTotal)
+                    userCart.push(
+                        {
+                        Quantity: user_quantity,
+                        Product: res[0].product,
+                        Cost: "$" + orderTotal
+                        }
+                        )
                     userCartTotal += orderTotal
+                    table = cTable.getTable(userCart);
 
-                    console.log("\n========================================SHOPPING CART========================================")
-                    console.log("Your shopping cart: " + userCart)
+
+                    console.log("\n------------------------------------------SHOPPING CART------------------------------------------\n")
+                    console.log(table)
                     console.log("Your current total: "  + userCartTotal)
                     console.log("\n================================================================================")
                     let newStock = res[0].stock_quantity - user_quantity;
@@ -169,26 +188,29 @@ function runBamazon () {
             });
         });
     }
-    
- function differntQuantity() {
-    inquirer
-    .prompt([
-        {
-            type: "confirm",
-            message: "\nDo you want to uodate your quantity?\n",
-            default: "false",
-            name: "responce"
-        }
-    ]).then(({responce}) => {
-        if (responce) {
-            quantity(user_choice_product_id)
-        } else {
-            runAgain();
-            return;
+    // ====================================== SELECT QUANTITY ======================================//
+ 
+    // Run this function if the quantity selected is larger than the current stock
+    function differntQuantity() {      
+        inquirer
+        .prompt([
+            {
+                type: "confirm",
+                message: "\nDo you want to uodate your quantity?\n",
+                default: "false",
+                name: "responce"
+            }
+        ]).then(({responce}) => {
+            if (responce) {
+                quantity(user_choice_product_id)
+            } else {
+                runAgain();
+                return;
             };
         });
     };
 
+    // This Function allows the user to select additional products after making a selection
     function runAgain() {
         inquirer
         .prompt([
@@ -202,7 +224,7 @@ function runBamazon () {
             if (again) {
                 runBamazonInside()
             } else {
-                console.log("Your total is: $" + userCartTotal)
+                console.log("\nYour total is: $" + userCartTotal)
                 console.log("\n================================================================================")
                 console.log("\n---------------- Goodbye ----------------\n")
 
