@@ -1,5 +1,6 @@
 const customer = require("./customer");
 const manager = require("./manager");
+const supervisor = require("./supervisor");
 const inquirer = require("inquirer");
 
 const password = "coding492"
@@ -10,7 +11,7 @@ bamazon = () => {
         {
             type: "list",
             message: "\n------------------------------------------------------------------------\nWelcome to BAMAZON. How would you like to proceed?\n------------------------------------------------------------------------\n",
-            choices: ["Enter as Customer", "Enter Manager Platform"],
+            choices: ["Enter as Customer", "Enter Manager Platform","Enter Supervisor Platform"],
             name: "choices"
         }
     ]).then(({choices}) => {
@@ -29,7 +30,10 @@ bamazon = () => {
             .then(({password}) => {
                 checkPassword(password)
             })
+        } else if (choices === "Enter Supervisor Platform") {
+            supervisor()
         }
+
         function checkPassword (key) {
             if (key === password) {
                 manager()
