@@ -41,7 +41,7 @@ const customer = function() {
                 if (err) throw err;
                 
             console.log("\n================================================================================")
-            console.log("Hello! Welcome to Bamazon")
+            console.log("Hello! Welcome to the Bamazon Customer Platform")
             console.log("================================================================================\n")
             runBamazonInside()
             });
