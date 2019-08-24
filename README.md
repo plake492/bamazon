@@ -1,5 +1,5 @@
 # Bamazon
-![head](media/node_mysql.png)
+![head](Media/node_mysql.png)
 ### Technologies used 
 <hr>
 
