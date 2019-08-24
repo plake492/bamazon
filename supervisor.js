@@ -18,15 +18,15 @@ const supervisor = () => {
     // let query2 = "SELECT department_id, department, SUM(product_sales) FROM products, product_sales, over_head FROM products "
     // query2 += "LEFT JOIN departments ON products.department = departments.name";
 
-    // let query3 = "SELECT departments.id, departments.name, departments.over_head, products.department, products.product_sales ";
-    // query3 += "FROM products INNER JOIN departments ON (products.department = departments.name ";
-    // query3 += "WHERE (products.department_name = ? AND departments.department_name = ?)"
+    let query3 = "SELECT departments.department_id, departments.name, departments.over_head, SUM(products.product_sales) AS product_sales, (departments.over_head - SUM(products.product_sales)) AS total_profits ";
+    query3 += "FROM bamazon_db.departments INNER JOIN products ON departments.name = products.department ";
+    query3 += "GROUP BY departments.department_id"
 
     // let responceArray = [];
     // newResponceArray = ""
 
     console.log("connected as id " + connection.threadId);
-    connection.query(query, function(err, item) {
+    connection.query(query3, function(err, item) {
         if (err) throw err;
         console.table(item);
         connection.end();
