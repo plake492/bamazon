@@ -24,7 +24,7 @@
 
 <hr>
 
-Bamazon is a Node.js app whoch mimics an online store. On startup, the app will direct the user to select from three platforms: 
+Bamazon is a Node.js app that mimics an online store. On startup, the app will direct the user to select from three platforms: 
 <ol>Enter as Customer</ol>
 <ol>Enter as Manager</ol>
 <ol>Enter as Supervisor</ol>
@@ -43,7 +43,8 @@ Selecting one of these options will bring the user into a new menu.
 
 # Customer Platform
 
-When the user enters the customer platform, the first prompt is asking what department they would like to enter. 
+When the user enters the customer platform, the first prompt is asking what department they would like to enter:
+
 ![node](Media/b2.png)
 
 Selecting a specific department will run a function that loops through all items inside a department and will then show only the items acossiated with that particular department. As shown here:
@@ -80,7 +81,7 @@ after selcting an item and a qunatity, the customer can continue to shop for add
 
 # Manager Platform
 
-Upon slecting the Manager Platform, the user must enter the admin password. Then they will see a menue asking how they wish to proceed. 
+Upon slecting the Manager Platform, the user must enter the admin password. Then they will see a menu for how they wish to proceed. 
 
 <br>
 
@@ -91,7 +92,7 @@ Upon slecting the Manager Platform, the user must enter the admin password. Then
 ### Veiw Products For Sale 
 <hr>
 
-The first option allows the user to veiw products for sale. They also can select by department, or all. The managers veiw has the addition of showing the current stock of each product:
+The first option allows the user to veiw products for sale. They can select by department, or veiw all products. The managers veiw has the addition of showing the current stock of each product:
 
 ![node](Media/bM2.png)
 
@@ -111,7 +112,7 @@ The second option allows the manager to view only items that have a stock of 5 o
 
 <hr>
 
-The add to stock option allows th emanager to select a specific item and add to its stock. After doing so, the user will see the previosu stock, the new stock, the cost of restock and the companies overall assets after the purchase:
+The Add To Inventory option allows the manager to select a specific item and add to its stock. After doing so, the user will see the previous stock, the new stock, the cost of restock and the new company overall assets after the purchase:
 
 ![node](Media/bM4.png)
 
@@ -121,7 +122,7 @@ The add to stock option allows th emanager to select a specific item and add to 
 
 <hr>
 
-The user can also add a new item. When selecting what department the new item is under, the manager can only choose to place the new item inside an alreadty existing department, only the supervisor can add departments (but onve one is added, it will become avalible to add new items into):
+The user can also add a new item (when selecting what department the new item is under, the manager can only choose to place the new item inside an alreadty existing department, only the supervisor can add departments).
 
 ![node](Media/bM5.png)
 
@@ -137,6 +138,12 @@ Additionally, there as the option to update the Name or Price of any existing it
 
 ![node](Media/bM7.png)
 
+
+
+
+<br>
+<br>
+<br>
 
 <div id="supervisor"></div>
 
