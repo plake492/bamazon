@@ -37,3 +37,22 @@ VALUES ("iPod", "Electronics", 250, 12),
 
 SELECT * FROM  products;
 
+-- for Departments
+
+USE bamazon_db;
+
+CREATE TABLE departments (
+	id  INT(11) AUTO_INCREMENT NOT NULL,
+    name VARCHAR(45) NOT NULL,
+    over_head INT(11) NOT NULL,
+   PRIMARY KEY(id)
+);
+
+INSERT INTO departments(name, over_head)
+VALUES ("Electronics",100000),
+("Books", 25000),
+("Instruments", 250000),
+("Toys", 75000);
+
+SELECT * FROM departments
+
