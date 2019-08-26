@@ -1,22 +1,26 @@
 # Bamazon
 ![head](Media/node_mysql.png)
 
-### Table of Contents 
+## Table of Contents 
 
-<a href=".customer">customer </a>
+<a href="#customer"><ul>Customer</ul></a>
+<a href="#manager"><ul>Manager</ul></a>
+<a href="#supervisor"><ul>Supervisor</ul></a>
 
-### Technologies used 
 <hr>
+
+## Technologies used 
 
 <div>MySQL</div>
 <div>Node.js</div>
 <div>Inquirer</div>
 <div>cTable</div>
 <div>SQL (npm package)</div>
+<br>
 
 <hr>
 
-### How It Works
+## How It Works
 
 <hr>
 
@@ -27,13 +31,15 @@ Bamazon is a Node.js app whoch mimics an online store. On startup, the app will 
 
 ![node](Media/b1.png)
 
+
+
 Selecting one of these options will bring the user into a new menu.
 
 <br>
 <br>
 <br>
 
-<div class="customer">
+<div id="customer"></div>
 
 # Customer Platform
 
@@ -69,6 +75,8 @@ after selcting an item and a qunatity, the customer can continue to shop for add
 <br>
 <br>
 <br>
+
+<div id="manager"></div>
 
 # Manager Platform
 
@@ -130,3 +138,30 @@ Additionally, there as the option to update the Name or Price of any existing it
 ![node](Media/bM7.png)
 
 
+<div id="supervisor"></div>
+
+# Supervisor Platform
+
+The Supervisor platform allows the user to either veiw product sales by individual departments, or to add a new department. 
+
+### Veiw Department Info
+
+<hr>
+
+Here we can see a breakdown for total sales, average sale price, department over head, and the total profit (subtracting the total sales from the department over head):
+
+![node](Media/bS1.png)
+
+<br>
+
+### Add New Department
+
+<hr>
+
+Here the supervisor is asked to give a new department name and an over head cost:
+
+![node](Media/bS2.png)
+
+As we can see in the Manager Platform, the newly created department is now avalible when adding new items: 
+
+![node](Media/bS3.png)
