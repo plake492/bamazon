@@ -1,5 +1,10 @@
 # Bamazon
 ![head](Media/node_mysql.png)
+
+### Table of Contents 
+
+<a href=".customer">customer </a>
+
 ### Technologies used 
 <hr>
 
@@ -27,6 +32,8 @@ Selecting one of these options will bring the user into a new menu.
 <br>
 <br>
 <br>
+
+<div class="customer">
 
 # Customer Platform
 
