@@ -21,10 +21,10 @@ const managerApp = function(){
         connection.connect(function(err) {
             if (err) throw err;
             console.log("connected as id " + connection.threadId);
-            connection.query("SELECT * FROM products", function(err, item) {
+            connection.query("SELECT * FROM departments", function(err, item) {
 
                 for (let i = 0; i < item.length; i++){
-                    departmentArr.push(item[i].department)
+                    departmentArr.push(item[i].name)
                     let newChoiceArr = new Set(departmentArr);
                     intoArrayDepartmant = [...newChoiceArr]
                 }

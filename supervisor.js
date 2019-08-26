@@ -1,4 +1,5 @@
 const supervisor = () => {
+
     const inquirer = require('inquirer');
     const mysql = require("mysql");
     const cTable = require('console.table');
@@ -10,37 +11,99 @@ const supervisor = () => {
     database: "bamazon_db"
     });
 
+    function runSupervisor () {
 
+        console.log("\n================================================================================")
+        console.log("Hello! Welcome to the Bamazon Supervisor Platform")
+        console.log("================================================================================\n")
 
-    let query = "SELECT name, COUNT (products.id) AS num_products FROM products ";
-    query += "LEFT JOIN departments ON products.department = departments.name GROUP BY department";
+        runSupervisorInside()
+    }
+    function runSupervisorInside() {
+        inquirer
+        .prompt([
+            {
+                type: "list",
+                message: "\nWhat would you like to do?",
+                choices: ["Veiw Department Info", "Create New Department"],
+                name: "action"
+            }
+        ]).then(({action}) => {
+            if (action === "Veiw Department Info") {
+                return veiwDepartment();
+            } else {
+                return createDepartment();
+            }
 
-    // let query2 = "SELECT department_id, department, SUM(product_sales) FROM products, product_sales, over_head FROM products "
-    // query2 += "LEFT JOIN departments ON products.department = departments.name";
+        });
+    }
+    function veiwDepartment() {
 
-    let query3 = "SELECT departments.department_id, departments.name, departments.over_head, SUM(products.product_sales) AS product_sales, (departments.over_head - SUM(products.product_sales)) AS total_profits ";
-    query3 += "FROM bamazon_db.departments INNER JOIN products ON departments.name = products.department ";
-    query3 += "GROUP BY departments.department_id"
+        let query = "SELECT departments.department_id, departments.name, SUM(products.num_product_sales) AS num_product_sales, SUM(products.product_sales / products.num_product_sales) AS Avg_sales_price, "
+        query += "departments.over_head AS department_over_head, SUM(products.product_sales) AS product_sales, (SUM(products.product_sales) - departments.over_head) AS total_profits ";
+        query += "FROM bamazon_db.departments INNER JOIN products ON departments.name = products.department ";
+        query += "GROUP BY departments.department_id"
 
-    // let responceArray = [];
-    // newResponceArray = ""
+        console.log("connected as id " + connection.threadId + "\n");
+        connection.query(query, function(err, item) {
+            if (err) throw err;
+            console.table(item);
+            runAgain()            
+        });
+    }
 
-    console.log("connected as id " + connection.threadId);
-    connection.query(query3, function(err, item) {
-        if (err) throw err;
-        console.table(item);
-        connection.end();
+    function createDepartment() {
 
-        // for (let i = 0; i < item.length; i++){
-        //     responceArray.push(item[i].department)
-        //     responceArray.push(item[i].department_id)
-        //     let newChoiceArr = new Set(responceArray);
-        //     newResponceArray = [...newChoiceArr]
-        // }
-        // if (err) throw err;
-        // console.table(newResponceArray)
-        
-    });
-}
+        inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "\nWhat is the name of the new department?\n",
+                name: "name"
+            },
+            {
+                type: "input",
+                message: "\nWhat is the over head costs?\n",
+                name: "overHead"
+            }
+        ]).then(({name, overHead}) => {
+            
+            connection.query("INSERT INTO departments (name, over_head) VALUES(?, ?)", 
+            [name, overHead], 
+            function(err) {
+            if (err) throw err;
+
+            connection.query("SELECT * FROM departments", function(err, item) {
+                if (err) throw err;
+
+                console.table(item.slice(-1)[0])
+                runAgain()
+                });
+            });
+        });
+    };
+
+    runSupervisor()
+
+    function runAgain() {
+        inquirer
+        .prompt([
+            {
+                type: "confirm",
+                message: "\nWould you like to do somthing else?\n",
+                default: "false",
+                name: "again"
+            }
+        ]).then(({again}) => {
+            if (again) {
+                runSupervisorInside()
+            } else {
+                console.log("\n================================================================================")
+                console.log("\n---------------------------------- Goodbye ----------------------------------\n")
+                connection.end();
+                return;
+            };
+        });
+    };
+};
 module.exports = supervisor
-
